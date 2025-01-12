@@ -9,6 +9,16 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
+var img *ebiten.Image
+
+func init() {
+	var err error
+	img, _, err = ebitenutil.NewImageFromFile("gopher.png")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 type Game struct {
 	count int
 }
@@ -20,6 +30,7 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0x80, 0xa0, 0xc0, 0xff})
+	screen.DrawImage(img, nil)
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("Hello, World! %d", g.count))
 }
 
