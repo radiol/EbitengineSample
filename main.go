@@ -2,23 +2,25 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-type Game struct{}
+type Game struct {
+	count int
+}
 
 func (g *Game) Update() error {
+	g.count++
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	for i := 0; i < 240; i += 16 {
-		m := fmt.Sprintf("Hello world!: %d", i)
-		ebitenutil.DebugPrintAt(screen, m, 0, i)
-	}
+	screen.Fill(color.RGBA{0x80, 0xa0, 0xc0, 0xff})
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("Hello, World! %d", g.count))
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
