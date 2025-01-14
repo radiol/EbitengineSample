@@ -21,16 +21,30 @@ func init() {
 
 type Game struct {
 	count int
+	x     float64
+	y     float64
 }
 
 func (g *Game) Update() error {
 	g.count++
+	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
+		g.y--
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
+		g.y++
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
+		g.x--
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
+		g.x++
+	}
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(50, 50)
+	op.GeoM.Translate(g.x, g.y)
 	op.GeoM.Scale(1.5, 1.0)
 	screen.Fill(color.RGBA{0x80, 0xa0, 0xc0, 0xff})
 	screen.DrawImage(img, op)
