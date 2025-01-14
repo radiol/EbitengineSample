@@ -20,13 +20,13 @@ func init() {
 }
 
 type Game struct {
-	count int
+	theta float64
 	x     float64
 	y     float64
 }
 
 func (g *Game) Update() error {
-	g.count++
+	g.theta++
 	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
 		g.y--
 	}
@@ -43,12 +43,20 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+	// 画像サイズを取得
+	b := img.Bounds()
 	op := &ebiten.DrawImageOptions{}
+	// 画像の中心を原点にして回転
+	op.GeoM.Translate(-float64(b.Dx())/2, -float64(b.Dy())/2)
+	op.GeoM.Rotate(g.theta * 2 * 3.14159 / 360)
+	// x,yを画像の中心に移動
+	op.GeoM.Translate(float64(b.Dx())/2, float64(b.Dy())/2)
+	// そのあと移動
 	op.GeoM.Translate(g.x, g.y)
-	op.GeoM.Scale(1.5, 1.0)
+	op.GeoM.Scale(2.0, 1.0)
 	screen.Fill(color.RGBA{0x80, 0xa0, 0xc0, 0xff})
 	screen.DrawImage(img, op)
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("Hello, World! %d", g.count))
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("Hello, World! %f", g.theta))
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
